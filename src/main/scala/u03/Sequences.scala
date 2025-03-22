@@ -1,5 +1,7 @@
 package u03
 
+import scala.annotation.tailrec
+
 object Sequences: // Essentially, generic linkedlists
   
   enum Sequence[E]:
@@ -20,6 +22,11 @@ object Sequences: // Essentially, generic linkedlists
       case Cons(h, t) if pred(h) => Cons(h, filter(t)(pred))
       case Cons(_, t)            => filter(t)(pred)
       case Nil()                 => Nil()
+
+    @tailrec
+    def contains[A](l: Sequence[A])(elem: A): Boolean = l match
+      case Cons(h, t) => h == elem || contains(t)(elem)
+      case Nil()      => false
 
 @main def trySequences =
   import Sequences.* 
