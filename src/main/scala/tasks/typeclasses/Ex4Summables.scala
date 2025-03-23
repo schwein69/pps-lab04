@@ -18,7 +18,7 @@ object Ex4Summables:
     def sum(a1: A, a2: A): A
     def zero: A
 
-  def sumAll[A: Summable](seq: Sequence[A]) = 
+  def sumAll[A: Summable](seq: Sequence[A]) =
     val summable = summon[Summable[A]]
     ???  // complete here
 
