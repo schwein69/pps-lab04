@@ -137,15 +137,18 @@ object SchoolModel:
     def emptySchool: School = nil()
 
     extension (school: School)
-      def courses: Sequence[String] = school.map((t, c) => c).filter(c => c != "").distinct
-      def teachers: Sequence[String] = school.map((t, c) => t).filter(t => t != "").distinct
+      def courses: Sequence[String] = school.map((t, c) => c).distinct
+      def teachers: Sequence[String] = school.map((t, c) => t).distinct
       def setTeacherToCourse(teacher: Teacher, course: Course): School = school.concat(Cons((teacher, course), nil()))
       def coursesOfATeacher(teacher: Teacher): Sequence[Course] = school.filter((t, c) => t == teacher).map((t, c) => c)
 
-      def hasTeacher(name: String): Boolean = school.map((t, c) => t).contains(name)
-      def hasCourse(name: String): Boolean = school.map((t, c) => c).contains(name)
-
-
+      @tailrec
+      def hasTeacher(name: String): Boolean = school match
+        case Cons((t, c), tail) if t == name => true
+        case Cons((t, c), tail) => tail.hasTeacher(name)
+        case _ => false
+      //def hasCourse(name: String): Boolean = school.filter((t, c) => c == name) != nil()
+      def hasCourse(name: String): Boolean = school.map((t,c) => c).contains(name)
 
 @main def examples(): Unit =
   import SchoolModel.BasicSchoolModule.*
